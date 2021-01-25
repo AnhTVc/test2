@@ -1,0 +1,1524 @@
+openapi: 3.0.1
+info:
+  title: API gianhadat
+  description: 'This is API gianhadat'
+  contact:
+    name: AnhTV
+  version: 1.0.0
+servers:
+- url: https://gapi.cenhomes.vn/
+  description: api dinhgia
+tags:
+- name: analytics
+  description: Everything about analytics gianhadat
+- name: search map
+  description: Everything about search
+- name: api search
+  description: Các api phục vụ ô search
+- name: api chi tiet tai san
+  description: Các api cho trang chi tiết tài sản
+- name: mobile gianhadat
+  description: Everything about in gianhadat in mobile app 
+- name: public dia chi
+  description: Lấy thông tin public địa chỉ
+- name: warning change price
+  description: cảnh báo thay đổi giá thẩm định
+- name: admin gianhadat
+  description: Các funtion cho chức năng admin gianhadat 
+
+
+paths:
+  /g-data-statistic/v1/api/analytics-address/search-free-text-time-series:
+    post:
+      tags:
+      - analytics
+      summary: Lấy thông tin phân tích nhà mặt phố, nhà riêng và chung cư của khu vực. Chỉ phân tích  quận huyện,  tỉnh 
+      operationId: search-free-text-time-series
+      requestBody:
+        description: full text address. Không cần gps 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiRequest'
+        required: true
+      security: 
+        - bearerAuth: ["adadad"]
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /g-data-statistic/v1/api/analytics-address/search-free-text:
+    post:
+      tags:
+      - analytics
+      summary: Lấy thông tin phân tích nhà mặt phố, nhà riêng và chung cư của khu vực  của time  frame  gần nhất
+      operationId: search-free-text
+      requestBody:
+        description: full text address. Không cần gps 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiRequest'
+        required: true
+      security: 
+        - bearerAuth: ["adadad"]
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /c-utility-scoring/v1/scoring-cenhomes:
+    post:
+      tags:
+      - search map
+      summary: Search tiện ích theo khu vực theo giáo dục, sức khỏe 
+      operationId: /c-utility-scoring/v1/scoring-cenhomes
+      requestBody:
+        description: full text address and gps
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /c-search/v1/dinhgia-suggest:
+    post:
+      tags:
+      - api search
+      summary: suggest trong form search box
+      operationId: /c-search/v1/dinhgia-suggest
+      description: "api trả về  khi người dùng search ở search "
+      requestBody:
+        description: "{\"cat_type\":\"nha_dat_collect\",\"data\":\"10 nguyen trai\"}"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                data:
+                  type: string
+                  default: "e.x nguyễn ngọc vũ, cầu giấy, hà nội"
+                cat_type:
+                  type: string
+                  default: "nha_dat_collect"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-search/v1/dinhgia-search:
+    post:
+      tags:
+      - api search
+      summary: suggest enter trong form search box
+      operationId: /c-search/v1/dinhgia-search?page=0
+      description: "api trả về  khi người dùng search ở search "
+      requestBody:
+        description: "{\"cat_type\":\"nha_dat_collect\",\"data\":\"10 nguyen trai\"}"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                data:
+                  type: string
+                  default: "e.x nguyễn ngọc vũ, cầu giấy, hà nội"
+                cat_type:
+                  type: string
+                  default: "nha_dat_collect"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-search/v1/get-url-analysis:
+    post:
+      tags:
+      - api search
+      summary: api trả về danh sách URL các quận theo địa chỉ  cho home  page và nhà lẻ 
+      operationId: /c-search/v1/get-url-analysis
+      description: "api trả về danh sách URL các quận theo địa chỉ  cho home  page và nhà lẻ "
+      requestBody:
+        description: "{\"address\": \"Ha Noi\", \"type\": \"quan_huyen\", \"mode\": \"list|singal\"}"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                address:
+                  type: string
+                  default: "e.x nguyễn ngọc vũ, cầu giấy, hà nội"
+                type:
+                  type: string
+                  default: "quan_huyen"
+                  description: "Hiện tại chỉ phục  vụ quận huyện "
+                mode:
+                  type: string
+                  default: "singal"
+                  description: "list or singal. list cho trang home, singal cho trang nhà lẻ"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-search/v1/dinhgia-search-text:
+    post:
+      tags:
+      - api search
+      summary: api trả về  gps từ địa chỉ  full text 
+      operationId: /c-search/v1/dinhgia-search-text
+      description: "api trả về  gps từ địa chỉ  full text "
+      requestBody:
+        description: "{\"address\": \"Lê Văn Lương cầu giấy hà nội\"}"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                address:
+                  type: string
+                  default: "e.x nguyễn ngọc vũ, cầu giấy, hà nội"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-collection/v1/api/dia-chi-cu-the/get-info/{bdsId}:
+    get:
+      tags:
+      - api chi tiet tai san
+      summary: Lấy thông tin bds đi chụp
+      operationId: /g-data-collection/v1/api/dia-chi-cu-the/get-info
+      description: "API lấy về thông tin tài sản"
+      parameters:
+        - in: path
+          name: bdsId
+          schema:
+            type: string
+          required: true
+          description: bds id get from response dinhgia-form-search
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-statistic/v1/api/analytics-address/bieu-do-gia:
+    get:
+      tags:
+      - api chi tiet tai san
+      summary: Lấy thông tin biểu đồ giá
+      operationId: /g-data-statistic/v1/api/analytics-address/bieu-do-gia
+      description: "Lấy thông tin biểu đồ giá"
+      parameters:
+        - name: id-dia-chi
+          in: query
+          description: "id-dia-chi=40"
+          required: true
+          schema:
+            type: integer
+        - name: type
+          in: query
+          description: type=quan
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: query
+          description: version=1.2.2
+          required: true
+          schema:
+            type: string
+        - name: type-bds-ids
+          in: query
+          description: type-bds-ids=7,5
+          required: true
+          schema:
+            type: string
+        - name: user-for
+          in: query
+          description: user-for=SALE
+          required: true
+          schema:
+            type: string
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-collection/v1/api/dia-chi-cu-the/bat-dong-san-xung-quanh:
+    get:
+      tags:
+      - api chi tiet tai san
+      summary: Lấy thông tin các tài sản xung quanh
+      operationId: g-data-collection/v1/api/dia-chi-cu-the/bat-dong-san-xung-quanh
+      description: "API lấy về thông tin tài sản"
+      parameters:
+        - in: query
+          name: id-bat-dong-san-nhap-lieu
+          schema:
+            type: number
+          required: true
+          description: bds id get from response get-info
+        - in: query
+          name: phuong-id
+          schema:
+            type: number
+          required: true
+          description: bds id get from response get-info
+        - in: query
+          name: quan-id
+          schema:
+            type: number
+          required: true
+          description: bds id get from response get-info
+        - in: query
+          name: limit
+          schema:
+            type: number
+          required: true
+          description: limit
+        - in: query
+          name: offset
+          schema:
+            type: number
+          required: true
+          description: offset
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-search/v1/dinhgia-heatmap:
+    post:
+      tags:
+      - api chi tiet tai san
+      summary: Dữ liệu heatmap
+      operationId: /c-search/v1/dinhgia-heatmap
+      description: "Lấy thông tin bản đồ heatmap"
+      requestBody:
+        description: "{\"year\":2020,\"month\":2,\"type_id\":7,\"top_left\":{\"lat\":21.03211566232992,\"lon\":105.74409484863283},\"bottom_right\":{\"lat\":20.959996897534392,\"lon\":105.87524414062501}}"
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                south_east:
+                  type: "object"
+                  properties:
+                    lat:
+                      type: number
+                      format: double
+                      default: 20.974857
+                    lon:
+                      type: number
+                      format: double
+                      default: 105.776979
+                north_west:
+                  type: "object"
+                  properties:
+                    lat:
+                      type: number
+                      format: double
+                      default: 20.974857
+                    lon:
+                      type: number
+                      format: double
+                      default: 105.776979
+                month:
+                  type: number
+                  format: integer
+                year:
+                  type: number
+                  format: integer
+                type_id:
+                  type: number
+                  format: integer
+                  description: "\"type_id\":7"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-search/v1/dinhgia-form-search:
+    post:
+      tags:
+      - mobile gianhadat
+      summary: Search tài sản đi chụp. Phục vụ cho trang bản đồ và trang  search list
+      operationId: /c-search/v1/dinhgia-form-search
+      description: ""
+      parameters:
+      - name: page
+        in: query
+        description: page
+        required: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: size
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: 'Nếu trang search list thì chỉ không cần truyền: south_east, north_west'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  
+  /c-search/v1/dinhgia-search-land:
+    post:
+      tags:
+      - mobile gianhadat
+      summary: Search thông tin thửa đất (không phải đường bao)
+      operationId: /c-search/v1/dinhgia-search-land
+      description: ""
+      parameters:
+      - name: page
+        in: query
+        description: page
+        required: true
+        schema:
+          type: integer
+      - name: size
+        in: query
+        description: size
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: bottom_right, top_left
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/dia-chi-cu-the/thua-dat/{thuaDatId}:
+    get:
+      tags:
+      - mobile gianhadat
+      summary: Lấy thông tin thửa đất 
+      operationId: /g-data-estimate/v1/api/dia-chi-cu-the/thua-dat
+      description: ""
+      parameters:
+        - in: path
+          name: thuaDatId
+          schema:
+            type: string
+          required: true
+          description: thua dat id, get in reponse of search-land
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/dia-chi-cu-the/estimate-dat:
+    post:
+      tags:
+      - mobile gianhadat
+      summary: dinh gia dat
+      operationId: /g-data-estimate/v1/api/dia-chi-cu-the/estimate-dat
+      description: "Dinhj gia dat"
+      requestBody:
+        description: dat infor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DinhGiaDatRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/dia-chi-cu-the/thua-dat-neighbor:
+    post:
+      tags:
+      - mobile gianhadat
+      summary: Tim kiem thua dat gan gps nhat
+      operationId: g-data-estimate/v1/api/dia-chi-cu-the/thua-dat-neighbor
+      description: "Tim kiem thua dat gan gps nhat"
+      requestBody:
+        description: gps info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeoPositionRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/dia-chi-cu-the/estimate-ctxd:
+    post:
+      tags:
+      - mobile gianhadat
+      summary: dinh gia ctxd
+      operationId: /g-data-estimate/v1/api/dia-chi-cu-the/estimate-ctxd
+      description: "Dinhj gia ctxd"
+      requestBody:
+        description: dat infor
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DinhGiaCTXDRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  
+  /g-data-estimate/v1/api/dia-chi-cu-the/estimate-all:
+    post:
+      tags:
+      - mobile gianhadat
+      summary: dinh gia ctxd
+      operationId: /g-data-estimate/v1/api/dia-chi-cu-the/estimate-all
+      description: "Dinh gia dat + CTXD"
+      requestBody:
+        description: dat info + ctxd info 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DinhGiaRequest'
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  
+  /g-data-estimate/v1/api/number-request-remain-estimate:
+    get:
+      tags:
+      - mobile gianhadat
+      summary: lấy số lần định giá còn lại
+      operationId: /g-data-estimate/v1/api/number-request-remain-estimate
+      description: ""
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-address/v1/public-dia-chis:
+    get:
+      tags:
+      - public dia chi
+      summary: Lấy về thông tin địa chỉ
+      operationId: /c-address/v1/public-dia-chis
+      description: "Lấy về thông tin địa chỉ"
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+          required: true
+          description: "type: tinh|quan|duong|phuong|duan"
+        - in: query
+          name: idPre
+          schema:
+            type: string
+          required: true
+          description: "ID cha, nếu type: tỉnh không cần ID cha, nếu type = quận id cha là tỉnh, tyoe | duong|phuong|duan id cha là quận id"
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-address-normalize/v2/address/normalize-impl:
+    post:
+      tags:
+      - public dia chi
+      summary: Lấy về thông tin địa chỉ
+      operationId: /g-address-normalize/v2/address/normalize
+      description: "Search query full text search trả về  cây địa chỉ"
+      requestBody:
+        description: dat info + ctxd info 
+        content:
+          text/plain:
+              schema:
+                type: string
+                default: 21 le van luong, cau giay 
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /c-search/v2/warning_change_price/heatmap:
+    post:
+      tags:
+      - warning change price
+      summary: "Bản đồ heatmap cho chức năng cảnh báo giá shay đổi"
+      operationId: /c-search/v2/warning_change_price/heatmap
+      description: "Có 2 layer: theo <b>tỉ lệ trực tiếp </b> và <b>theo tỉ lệ gián tiếp</b>. Theo tỉ lệ gián tiếp là so sanh (tỉ lệ giữa giá thẩm định và giá tin rao ở thời điểm thẩm định) so với (tỉ lệ giữa giá thẩm định và giá tin rao ở thời điểm hiện tại). Theo tỉ lệ trực tiếp là tính tỉ lệ giữa giá thẩm định và giá tin rao ở thời điểm hiện tại. các tham số: year, month, type_id, top_left, bottom_right, ranges  -  cần truyền trong trường hợp có filter (item: field - tên trường cần lọc , gte - cần filter >= ?, lte - cần filter <= ? )"
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  year:
+                    type: number
+                    format: integer
+                  month:
+                    type: number
+                    format: integer
+                  type_id:
+                    type: number
+                    format: integer
+                  top_left:
+                    type: "object"
+                    properties:
+                      lat:
+                        type: number
+                      lon:
+                        type: number
+                  bottom_right:
+                    type: "object"
+                    properties:
+                      lat:
+                        type: number
+                      lon:
+                        type: number
+                  ranges:
+                    type: array
+                    items:
+                      type: "object"
+                      properties:
+                        field:
+                          type: "string"
+                          description: "ti_le_thay_doi_gian_tiep"
+                          default: "ti_le_thay_doi_gian_tiep"
+                        gte:
+                          type: number
+                          description: "Greater than or equal to."
+                        lte:
+                          type: number
+                          description: "Less than or equal to."
+                        
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+
+  /c-search/v2/warning_change_price/get-all-gia-tham-dinh:
+    post:
+      tags:
+      - warning change price
+      summary: "List gia-tham-dinh" 
+      operationId: /c-search/v2/warning_change_price/get-all-gia-tham-dinh
+      description: "Lấy về thông tin các điểm GPS trên bản đồ hoặc thanh filter  bên trái theo đia chỉ "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  type_id:
+                    type: number
+                    format: integer
+                  street:
+                    type: number
+                    format: integer
+                  district:
+                    type: number
+                    format: integer
+                  city:
+                    type: number
+                    format: integer
+                  top_left:
+                    type: "object"
+                    properties:
+                      lat:
+                        type: number
+                      lon:
+                        type: number
+                  bottom_right:
+                    type: "object"
+                    properties:
+                      lat:
+                        type: number
+                      lon:
+                        type: number
+                        
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/warning_change_price/overview:
+    get:
+      tags:
+      - warning change price
+      summary: Thông tin về danh sách các khu vực cảnh baáo giá thẩm định đã thay đổi
+      operationId: /g-data-estimate/v1/api/warning_change_price/overview
+      description: "lấy thông tin tổng quan về khu vực cảnh báo"
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/warning_change_price/get-khu-vuc:
+    post:
+      tags:
+      - warning change price
+      summary: "Click vào khu vực trên bản đồ" 
+      operationId: /c-search/v2/warning_change_price/get-khu-vuc
+      description: "Truyền các thông tin: duongId, typeBdsId "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  duongId:
+                    type: number
+                    format: integer
+                  typeBdsId:
+                    type: number
+                    format: integer
+                        
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-data-estimate/v1/api/warning_change_price/cap-nhat-trang-thai-xu-ly:
+    post:
+      tags:
+      - warning change price
+      summary: "Thẩm định viện, kiểm soáyt viên  cập nhật thông tin  notes xử lý" 
+      operationId: /g-data-estimate/v1/api/warning_change_price/cap-nhat-trang-thai-xu-ly
+      description: "Truyền các thông tin: id, notesXuLy "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  id:
+                    type: number
+                    format: long
+                  notesXuLy:
+                    type: string
+                        
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  
+  /g-auth/v1/api/admin/get-groups:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "Lấy danh sách các group và subgroup" 
+      operationId: /g-auth/v1/api/get-user-groups
+      description: "Trả về danh sách các group và subgroup được phân quyền. Trong TH  không truyền lên sẽ sget all data . Type: GROUP or SUB_GROUP (GROUP là get all, SUBGROUP là get group sub cụ thể). id: id của group (nếu có)"
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  type:
+                    type: string
+                    description: "GROUP or SUB_GROUP"
+                  id:
+                    type: number
+                    format: integer
+                        
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+
+  /g-auth/v1/api/admin/add-group:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "Thêm mới 1 group, type default is SUB_GROUP. chú ý luôn luôn có giá trị này" 
+      operationId: /g-auth/v1/api/add-user-group
+      description: "Thêm mới group"
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  type:
+                    type: string
+                    description: "SUB_GROUP"
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  idParent:
+                    type: number
+                        
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /api/admin/del-group:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "del sub group..." 
+      operationId: /api/admin/del-group
+      description: "del sub group "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  id:
+                    type: number
+                    format: string
+                    default: "trường này là requite"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-auth/v1/api/admin/register:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "Chức năng tạo người dùng mới, tích hợp luâôn chức năng  jsoin  group" 
+      operationId: /g-auth/v1/api/admin/register
+      description: "format data giống như hàm register api trang admin. Chỉ cần thêm array groups "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  activated:
+                    type: boolean
+                  authorities:
+                    type: array
+                    items:
+                      type: string
+                      default: "QUYEN_CHECK_GIA_DOI_TAC_NGAN_HANG"
+                  email:
+                    type: string
+                    default: "email"
+                  firstName:
+                    type: string
+                    default: "firstName"
+                  fullName:
+                    type: string
+                    default: "fullName"
+                  login:
+                    type: string
+                    default: "login"
+                  password:
+                    type: string
+                    default: "password"
+                  phone:
+                    type: string
+                    default: "phone"
+                  groups:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        quyen:
+                          type: string
+                          default: "QUYEN_CHECK_GIA_DOI_TAC_NGAN_HANG"
+                        partnerGroupId:
+                          type: number
+                          default: "ID of sub group"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-auth/v1/api/admin/extra-users:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "Chức năng cập nhật thông tin user, cập nhật group  ..." 
+      operationId: /g-auth/v1/api/admin/extra-users
+      description: "format data giống như hàm register api trang admin. Chỉ cần thêm array groups "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  id:
+                    type: number 
+                    default: "extra user id"
+                  phone:
+                    type: string
+                    format: string
+                    default: "123456"
+                  user:
+                    type: object
+                    properties: 
+                      activated:
+                        type: boolean
+                      authorities:
+                        type: array
+                        items:
+                          type: string
+                          default: "QUYEN_CHECK_GIA_DOI_TAC_NGAN_HANG"
+                      email:
+                        type: string
+                        default: "email"
+                      firstName:
+                        type: string
+                        default: "firstName"
+                      fullName:
+                        type: string
+                        default: "fullName"
+                      login:
+                        type: string
+                        default: "login"
+                      password:
+                        type: string
+                        default: "password"
+                      phone:
+                        type: string
+                        default: "phone"
+                  groupUserDTOList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        quyen:
+                          type: string
+                          default: "QUYEN_CHECK_GIA_DOI_TAC_NGAN_HANG"
+                        partnerGroupId:
+                          type: number
+                          default: "ID of sub group"
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /api/admin/extra-users/search:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "Get all user by group va subgroup..." 
+      operationId: /api/admin/extra-users/search
+      description: "Sửa dụng paage để phân trang "
+      requestBody:
+        description: resquest data
+        content:
+          application/json:
+              schema:
+                type: "object"
+                properties:
+                  nameOrPhone:
+                    type: string 
+                    default: "nameOrPhone"
+                  groupId:
+                    type: number
+                    format: string
+                    default: "trường này là requite"
+                  subGroupId:
+                    type: number
+                    format: string
+                    default: "sub group cuối cùng"
+        required: true
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+  /g-auth/v1/api/admin/get-group-by-user:
+    post:
+      tags:
+      - admin gianhadat
+      summary: "Lấy danh sách các group by user" 
+      operationId: /g-auth/v1/api/admin/get-group-by-user
+      description: "Lấy danh sách các group by user"
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ""
+          example: "4892"
+      security: 
+        - bearerAuth: []
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResponse'
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: string
+  schemas:
+    ApiRequest:
+      type: "object"
+      properties:
+        address:
+          type: "string"
+          default: "e.x nguyễn ngọc vũ, cầu giấy, hà nội"
+        lat:
+          type: number
+          format: double
+          default: 20.974857
+        lon:
+          type: number
+          format: double
+          default: 105.776979
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: "0: success; 1: false"
+        description:
+          type: string
+          description: "Mô tả lỗi"
+        payload:
+          type: array
+          items:
+            type: object
+          description: "Dữ liệu phân tích, typeBdsId: 5 (nhà phố) , 7 (Nhà riêng để ở), 8 (Căn hộ, chung cư)"
+    MapRequest:
+      type: "object"
+      properties:
+        south_east:
+          type: "object"
+          properties:
+            lat:
+              type: number
+              format: double
+              default: 20.974857
+            lon:
+              type: number
+              format: double
+              default: 105.776979
+        north_west:
+          type: "object"
+          properties:
+            lat:
+              type: number
+              format: double
+              default: 20.974857
+            lon:
+              type: number
+              format: double
+              default: 105.776979
+    SearchRequest:
+      type: "object"
+      properties:
+        south_east:
+          type: "object"
+          properties:
+            lat:
+              type: number
+              format: double
+              default: 20.974857
+            lon:
+              type: number
+              format: double
+              default: 105.776979
+        north_west:
+          type: "object"
+          properties:
+            lat:
+              type: number
+              format: double
+              default: 20.974857
+            lon:
+              type: number
+              format: double
+              default: 105.776979
+        city:
+          type: number
+          default: 1
+        district:
+          type: number
+          default: 28
+        street:
+          type: number
+          default: 369392
+        ward:
+          type: number
+          default: 369392
+          description: phường xã
+        address:
+          type: string
+          default: "Số nhà"
+        lane:
+          type: string
+          description: ngõ 
+          default: "ngõ"
+        village:
+          type: string
+          description: thôn xóm 
+          default: "thôn xóm"
+        alley:
+          type: string
+          description: ngách hẻm
+          default: "ngách hẻm"
+    GeoPositionRequest:
+      type: "object"
+      properties:
+        lat:
+          type: number
+          format: double
+          default: 20.974857
+        lon:
+          type: number
+          format: double
+          default: 105.776979
+            
+    DinhGiaDatRequest:
+      type: "object"
+      properties:
+        idBatDongSanNhapLieu:
+          type: number
+          format: integer
+        phuongXaId:
+          type: number
+          format: integer
+        tinhId:
+          type: number
+          format: integer
+        duongId:
+          type: number
+          format: integer
+        quanHuyenId:
+          type: number
+          format: integer
+        lat:
+          type: number
+          format: double
+          default: 20.974857
+        lon:
+          type: number
+          format: double
+          default: 105.776979
+        viTriId:
+          type: number
+          format: integer
+        dienTich:
+          type: number
+          format: double
+        chieuRongMatTien:
+          type: number
+          format: double
+        chieuRongMatDuong:
+          type: number
+          format: double
+        hinhDangLoDatId:
+          type: number
+          format: double
+        huongDatId:
+          type: number
+          format: double
+        soToBanDo:
+          type: string
+        soThua:
+          type: string
+    DinhGiaCTXDRequest:
+      type: "object"
+      properties:
+        idBatDongSanNhapLieu:
+          type: number
+          format: integer
+        phuongXaId:
+          type: number
+          format: integer
+        quanHuyenId:
+          type: number
+          format: integer
+        tinhId:
+          type: number
+          format: integer
+        duongId:
+          type: number
+          format: integer
+        lat:
+          type: number
+          format: double
+          default: 20.974857
+        lon:
+          type: number
+          format: double
+          default: 105.776979
+        namXayDung:
+          type: number
+          format: integer
+        soPhongNgu:
+          type: number
+          format: integer
+        soNhaVeSinh:
+          type: number
+          format: integer
+        loaiNhaId:
+          type: number
+          format: integer
+        soTang:
+          type: number
+          format: integer
+        dienTichSuDung:
+          type: number
+          format: double
+          description: soTang * dienTichDat
+        chatLuongConLai:
+          type: number
+          format: double
+    DinhGiaRequest:
+      type: "object"
+      properties:
+        idBatDongSanNhapLieu:
+          type: number
+          format: integer
+        phuongXaId:
+          type: number
+          format: integer
+        tinhId:
+          type: number
+          format: integer
+        duongId:
+          type: number
+          format: integer
+        quanHuyenId:
+          type: number
+          format: integer
+        lat:
+          type: number
+          format: double
+          default: 20.974857
+        lon:
+          type: number
+          format: double
+          default: 105.776979
+        namXayDung:
+          type: number
+          format: integer
+        soPhongNgu:
+          type: number
+          format: integer
+        soNhaVeSinh:
+          type: number
+          format: integer
+        loaiNhaId:
+          type: number
+          format: integer
+        soTang:
+          type: number
+          format: integer
+        dienTichSuDung:
+          type: number
+          format: double
+          description: soTang * dienTichDat
+        chatLuongConLai:
+          type: number
+          format: double
+        viTriId:
+          type: number
+          format: integer
+        dienTich:
+          type: number
+          format: double
+        chieuRongMatTien:
+          type: number
+          format: double
+        chieuRongMatDuong:
+          type: number
+          format: double
+        hinhDangLoDatId:
+          type: number
+          format: double
+        huongDatId:
+          type: number
+          format: double
+        soToBanDo:
+          type: string
+        soThua:
+          type: string
+        idThuaDat:
+          type: number
+        loaiBatDongSanId:
+          type: number
+    PublicResponse:
+      type: object
